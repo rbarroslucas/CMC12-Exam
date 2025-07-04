@@ -1,6 +1,17 @@
 import numpy as np
 
 class DoubleInvertedPendulumCart:
+    """
+    Double inverted pendulum on a cart system.
+    This class models a double inverted pendulum on a cart system and computes the linearized state-space representation.
+    Attributes:
+        m0 (float): Mass of the cart.
+        m1 (float): Mass of the first pendulum.
+        m2 (float): Mass of the second pendulum.
+        L1 (float): Length of the first pendulum.
+        L2 (float): Length of the second pendulum.
+        g (float): Acceleration due to gravity.
+    """
     def __init__(self, m0: float, m1: float, m2: float, L1: float, L2: float, g: float = 9.81):
         self.m0 = m0
         self.m1 = m1
@@ -21,6 +32,10 @@ class DoubleInvertedPendulumCart:
         return self.A, self.B
     
     def _compute_linearized_matrices(self):
+        """
+        Compute the linearized state-space matrices for the system.
+    
+        """
         m0, m1, m2 = self.m0, self.m1, self.m2
         L1, L2, g = self.L1, self.L2, self.g
         l1, l2 = self.l1, self.l2
@@ -52,6 +67,9 @@ class DoubleInvertedPendulumCart:
         self._compute_state_space_matrices()
     
     def _compute_state_space_matrices(self):
+        """
+        Compute the state-space matrices for the system.
+        """
         A21 = -self.M0_inv @ self.dh_dtheta
         B21 = self.M0_inv @ self.F
         

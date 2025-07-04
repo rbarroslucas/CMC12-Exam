@@ -1,6 +1,7 @@
 import numpy as np
 from types import SimpleNamespace
 
+# Set the parameters for the simulation
 config = SimpleNamespace(
     m0=1.5,
     m1=0.5,

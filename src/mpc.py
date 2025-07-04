@@ -2,6 +2,21 @@ import numpy as np
 import cvxpy as cp
 
 class LMPC:
+    """
+    Linear Model Predictive Control (LMPC) class.
+    This class implements a linear MPC controller for a discrete-time linear system.
+    Attributes:
+        A (np.ndarray): State transition matrix.
+        B (np.ndarray): Control input matrix.
+        N (int): Prediction horizon.
+        Q (np.ndarray): State cost matrix.
+        R (np.ndarray): Control cost matrix.
+        Qn (np.ndarray): Terminal state cost matrix.
+        x_min (np.ndarray): Minimum state constraints.
+        x_max (np.ndarray): Maximum state constraints.
+        u_min (np.ndarray): Minimum control input constraints.
+        u_max (np.ndarray): Maximum control input constraints.
+    """
     def __init__(self, A, B, N, Q, R, Qn=None, x_min=None, x_max=None, u_min=None, u_max=None):
         self.A = A
         self.B = B
@@ -21,6 +36,15 @@ class LMPC:
         self.u_ref = np.zeros(self.m)
         
     def solve_mpc(self, x_current):
+        """
+        Solve the MPC optimization problem.
+        Args:
+            x_current (np.ndarray): Current state of the system.
+        Returns:
+            u_opt (np.ndarray): Optimal control input for the next time step.
+            X_opt (np.ndarray): Predicted state trajectory over the prediction horizon.
+            U_opt (np.ndarray): Predicted control inputs over the prediction horizon.
+        """
         X = cp.Variable((self.N + 1, self.n))
         U = cp.Variable((self.N, self.m))
         
@@ -61,10 +85,27 @@ class LMPC:
         return U.value[0], X.value, U.value
 
     def set_reference(self, x_ref):
+        """
+        Set the reference state for the MPC controller.
+        Args:
+            x_ref (np.ndarray): Reference state.
+        """
         self.x_ref = x_ref
         self.u_ref = np.zeros(self.m)
     
     def simulate(self, x0, N_sim, x_ref=None, dt=0.1):
+        """
+        Simulate the system using the LMPC controller.
+        Args:
+            x0 (np.ndarray): Initial state of the system.
+            N_sim (int): Number of simulation steps.
+            x_ref (np.ndarray, optional): Reference state for the MPC controller. Defaults to None.
+            dt (float, optional): Time step for the simulation. Defaults to 0.1.
+        Returns:
+            X_hist (np.ndarray): History of states over the simulation.
+            U_hist (np.ndarray): History of control inputs over the simulation.
+            t_hist (np.ndarray): Time history of the simulation.
+        """
         if x_ref is not None:
             self.set_reference(x_ref)
         
