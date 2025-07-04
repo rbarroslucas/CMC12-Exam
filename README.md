@@ -7,6 +7,8 @@ Group:
 - William Nelton
 - Márcio Vicente
 
+<img src="results/gif3.gif" width="500" alt="Example of the double inverted pendulum simulation" />
+
 ### System Description
 
 * **Cart** : Movable base with mass `m0`
